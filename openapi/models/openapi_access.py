@@ -365,7 +365,6 @@ class Access(models.Model):
 
         paths_object = {k: v for k, v in paths_object.items() if v}
         for _path_item_key, path_item_value in paths_object.items():
-
             for path_method in path_item_value.values():
                 # add tag
                 path_method.update({"tags": [model_name]})
@@ -459,9 +458,10 @@ class AccessCreateContext(models.Model):
             vals["name"] = urlparse.quote_plus(vals["name"].lower())
         return vals
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
-        vals = self._fix_name(vals)
+        for val in vals:
+            val = self._fix_name(val)
         return super(AccessCreateContext, self).create(vals)
 
     def write(self, vals):

@@ -14,7 +14,6 @@ from odoo.addons.base_api.lib import pinguin
 
 
 class Namespace(models.Model):
-
     _name = "openapi.namespace"
     _description = "Integration"
 
@@ -89,9 +88,10 @@ class Namespace(models.Model):
             vals["name"] = urlparse.quote_plus(vals["name"].lower())
         return vals
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
-        vals = self._fix_name(vals)
+        for val in vals:
+            val = self._fix_name(val)
         return super(Namespace, self).create(vals)
 
     def write(self, vals):
