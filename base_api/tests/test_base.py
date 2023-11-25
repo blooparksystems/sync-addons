@@ -7,7 +7,7 @@ from odoo.tests.common import TransactionCase
 prefix = "__base_api__."
 
 
-@tagged("post_install", "at_install")
+@tagged("-at_install", "post_install")
 class TestBase(TransactionCase):
     def test_search_or_create(self):
         # define test variables
