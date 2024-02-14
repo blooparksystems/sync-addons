@@ -254,7 +254,6 @@ def get_dictlist_from_model(model, spec, **kwargs):
                 record, spec, include_fields, exclude_fields, ENV, delim
             )
         ]
-
     return result
 
 
@@ -314,7 +313,6 @@ def get_dict_from_record(
     validate_spec(record, _spec)
 
     for field in _spec:
-
         if isinstance(field, tuple):
             # It's a 2many (or a 2one specified as a list)
             if isinstance(field[1], list):
@@ -328,6 +326,7 @@ def get_dict_from_record(
                 result[field[0]] = get_dict_from_record(
                     record[field[0]], field[1], (), (), ENV, delim
                 )
+
         # Normal field, or unspecified relational
         elif isinstance(field, six.string_types):
             if not hasattr(record, field):
@@ -346,7 +345,9 @@ def get_dict_from_record(
             fld = record._fields[field]
             if fld.relational:
                 if fld.type.endswith("2one"):
-                    result[field] = value.id
+                    # if there is no value, it should be None, not False 
+                    # to avoid validation errors in the client side
+                    result[field] = value.id or None
                 elif fld.type.endswith("2many"):
                     result[field] = value.ids
             elif (value is False or value is None) and fld.type != "boolean":
