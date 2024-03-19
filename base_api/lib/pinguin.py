@@ -16,6 +16,7 @@ import werkzeug.wrappers
 from psycopg2.extensions import ISOLATION_LEVEL_READ_COMMITTED
 
 import odoo
+from odoo.tools.safe_eval import safe_eval
 from odoo.http import request
 
 try:
@@ -221,6 +222,8 @@ def get_dictlist_from_model(model, spec, **kwargs):
     :rtype: list
     """
     domain = kwargs.get("domain", [])
+    if isinstance(domain, str):
+        domain = safe_eval(domain)
     offset = kwargs.get("offset", 0)
     limit = kwargs.get("limit")
     order = kwargs.get("order")
@@ -289,6 +292,7 @@ def get_model_for_read(model, ENV=False):
 # Python > 3.5
 # def get_dict_from_record(record, spec: tuple, include_fields: tuple, exclude_fields: tuple):
 
+
 # Extract nested values from a record
 def get_dict_from_record(
     record, spec, include_fields, exclude_fields, ENV=False, delim="/"
@@ -345,7 +349,7 @@ def get_dict_from_record(
             fld = record._fields[field]
             if fld.relational:
                 if fld.type.endswith("2one"):
-                    # if there is no value, it should be None, not False 
+                    # if there is no value, it should be None, not False
                     # to avoid validation errors in the client side
                     result[field] = value.id or None
                 elif fld.type.endswith("2many"):

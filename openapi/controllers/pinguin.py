@@ -584,7 +584,7 @@ def wrap__resource__create_one(modelname, context, data, success_code, out_field
     return successful_response(success_code, out_data)
 
 
-def wrap__resource__read_all(modelname, success_code, out_fields):
+def wrap__resource__read_all(modelname, success_code, out_fields, **kw):
     """function to read all records.
 
     :param str modelname: The name of the model.
@@ -594,7 +594,7 @@ def wrap__resource__read_all(modelname, success_code, out_fields):
     :returns: successful response with records data
     :rtype: werkzeug.wrappers.Response
     """
-    data = get_dictlist_from_model(modelname, out_fields)
+    data = get_dictlist_from_model(modelname, out_fields, **kw)
     return successful_response(success_code, data)
 
 
@@ -804,6 +804,7 @@ def method_is_allowed(method, methods_conf, main=False, raise_exception=False):
 # Pinguin OAS #
 ###############
 
+
 # Get definition name
 def get_definition_name(modelname, prefix="", postfix="", splitter="-"):
     """Concatenation of the prefix, modelname, postfix.
@@ -904,9 +905,11 @@ def get_OAS_definitions_part(
             elif meta["type"] == "selection":
                 field_property.update(
                     {
-                        "type": "integer"
-                        if isinstance(meta["selection"][0][0], int)
-                        else "string",
+                        "type": (
+                            "integer"
+                            if isinstance(meta["selection"][0][0], int)
+                            else "string"
+                        ),
                         "enum": [i[0] for i in meta["selection"]],
                     }
                 )
