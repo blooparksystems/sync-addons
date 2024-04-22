@@ -23,6 +23,36 @@ PARAM_ID = {
     "type": "integer",
     "format": "int64",
 }
+PARAM_MULTI = [
+    {
+        "name": "domain",
+        "in": "query",
+        "description": "Domain to be used to filter records",
+        "required": False,
+        "type": "list",
+    },
+    {
+        "name": "offset",
+        "in": "query",
+        "description": "Offset to be used for pagination",
+        "required": False,
+        "type": "integer",
+    },
+    {
+        "name": "limit",
+        "in": "query",
+        "description": "Limit to be used for pagination or while reading records",
+        "required": False,
+        "type": "integer",
+    },
+    {
+        "name": "order",
+        "in": "query",
+        "description": "Order to be used for sorting",
+        "required": False,
+        "type": "string",
+    },
+]
 
 
 class Access(models.Model):
@@ -224,6 +254,7 @@ class Access(models.Model):
                 "description": "Returns all %s objects" % model_name,
                 "operationId": "getAll%s" % capitalized_model_name,
                 "produces": ["application/json"],
+                "parameters": PARAM_MULTI,
                 "responses": {
                     "200": {
                         "description": "A list of %s." % model_name,
