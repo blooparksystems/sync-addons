@@ -23,13 +23,14 @@ PARAM_ID = {
     "type": "integer",
     "format": "int64",
 }
+
 PARAM_MULTI = [
     {
         "name": "domain",
         "in": "query",
         "description": "Domain to be used to filter records",
         "required": False,
-        "type": "list",
+        "type": "string",
     },
     {
         "name": "offset",
