@@ -890,6 +890,8 @@ def get_OAS_definitions_part(
                 field_property.update(type="number", format="float")
             elif meta["type"] == "char":
                 field_property.update(type="string")
+            elif meta["type"] == "html":
+                field_property.update(type="string")
             elif meta["type"] == "text":
                 field_property.update(type="string")
             elif meta["type"] == "binary":
@@ -946,3 +948,4 @@ def get_OAS_definitions_part(
         del definitions[definition_name]["required"]
 
     return definitions
+
